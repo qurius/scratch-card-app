@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Diwali Dhamaka - Scratch & Win!</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Email Modal -->
+  <div id="emailModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>🪔 Welcome to OneCard Diwali Dhamaka! 🪔</h2>
+        <p>शुभ दीपावली!</p>
+      </div>
+      <div class="modal-body">
+        <p>Enter your email to play and win exciting prizes!</p>
+        <form id="emailForm">
+          <input 
+            type="email" 
+            id="emailInput" 
+            placeholder="Enter your email" 
+            required
+            autocomplete="email"
+          />
+          <button type="submit" class="btn-primary">
+            🎁 Start Playing
+          </button>
+        </form>
+        <p class="privacy-note">Your email is safe with us and used only for prize distribution.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <h1 class="title">🪔 OneCard Diwali Dhamaka! 🪔</h1>
+    <p class="subtitle">Scratch the card to reveal your Diwali gift</p>
+    <p class="subtitle-hindi">शुभ दीपावली!</p>
+
+    <div class="card-wrapper">
+      <!-- Prize container (behind canvas) -->
+      <div id="prizeContainer" class="prize-container">
+        <div class="prize-text" id="prizeText">Loading...</div>
+      </div>
+
+      <!-- Scratch canvas (overlay) -->
+      <canvas id="scratchCanvas" class="scratch-canvas"></canvas>
+
+      <!-- Scratch instruction -->
+      <div id="scratchInstruction" class="scratch-instruction">
+        👆 Scratch here to reveal
+      </div>
+    </div>
+
+    <div id="statusMessage" class="status-message"></div>
+
+    <!-- Diya decorations -->
+    <div class="diya-container">
+      <div class="diya">🪔</div>
+      <div class="diya">🪔</div>
+      <div class="diya">🪔</div>
+      <div class="diya">🪔</div>
+      <div class="diya">🪔</div>
+    </div>
+
+    <!-- Confetti container -->
+    <div id="confetti" class="confetti-container"></div>
+  </div>
+
+  <!-- Audio elements for sound effects -->
+  <audio id="scratchSound" preload="auto">
+    <source src="https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3" type="audio/mpeg">
+  </audio>
+  <audio id="revealSound" preload="auto">
+    <source src="https://assets.mixkit.co/active_storage/sfx/2000/2000-preview.mp3" type="audio/mpeg">
+  </audio>
+  <audio id="celebrationSound" preload="auto">
+    <source src="https://assets.mixkit.co/active_storage/sfx/1435/1435-preview.mp3" type="audio/mpeg">
+  </audio>
+
+  <script src="app.js"></script>
+</body>
+</html>
