@@ -9,11 +9,11 @@ const PORT = process.env.PORT || 3000;
 
 // Initialize PostgreSQL connection pool
 const pool = new Pool({
-  host: process.env.DB_HOST || 'localhost',
-  port: process.env.DB_PORT || 5432,
-  database: process.env.DB_NAME || 'scratch_card_db',
-  user: process.env.DB_USER || 'postgres',
-  password: process.env.DB_PASSWORD || 'postgres',
+  host: process.env.DB_POSTGRESDB_HOST || 'localhost',
+  port: process.env.DB_POSTGRESDB_PORT || 5432,
+  database: process.env.DB_POSTGRESDB_DATABASE || 'scratch_card_db',
+  user: process.env.DB_POSTGRESDB_USER || 'postgres',
+  password: process.env.DB_POSTGRESDB_PASSWORD || 'postgres',
 });
 
 // Create tables
