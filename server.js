@@ -16,6 +16,9 @@ const pool = new Pool({
   password: process.env.DB_POSTGRESDB_PASSWORD || 'postgres',
 });
 
+console.log(process.env);
+
+
 // Create tables
 const initDatabase = async () => {
   try {
