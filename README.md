@@ -4,17 +4,20 @@ A mobile-optimized scratch-to-reveal prize web application with email collection
 
 ## ✨ Features
 
-- **Email Collection Modal**: Beautiful modal to capture user email before playing
-- **Mobile-Optimized**: Fully responsive design with touch event handling
-- **HTML5 Canvas**: Smooth scratch effect using canvas compositing
-- **PostgreSQL Database**: Robust database to track users and prevent multiple plays
-- **One-Time Play**: Email-based restriction (one play per email)
-- **Auto-Reveal**: Automatically reveals prize when 50% scratched
-- **Sound Effects**: Scratch, reveal, and celebration audio
-- **Diwali Theme**: Festive orange/gold colors, diya animations, Hindi text
-- **Celebration Effects**: Firework-style confetti and mobile vibration on win
-- **Weighted Prize System**: Configurable prize pool with probability weights
-- **Session Persistence**: User sessions stored in localStorage and database
+- **📧 Email-Based Order IDs**: Auto-generated from customer email (amit@fplabs.tech → AMIT)
+- **🛍️ Purchase Validation**: Only customers who spend ₹500+ can play
+- **📦 Product Analytics**: JSONB storage for queryable sales data
+- **🔊 Error Sound Effects**: Audio feedback for invalid orders
+- **📱 Mobile-Optimized**: Fully responsive design with touch event handling
+- **🎨 HTML5 Canvas**: Smooth scratch effect using canvas compositing
+- **🗄️ PostgreSQL Database**: Robust database to track orders and prevent reuse
+- **🎯 One-Time Play**: One scratch per order (prevents fraud)
+- **✨ Auto-Reveal**: Automatically reveals prize when 50% scratched
+- **🎵 Sound Effects**: Scratch, reveal, celebration, and error audio
+- **🪔 Diwali Theme**: Festive orange/gold colors, diya animations, Hindi text
+- **🎆 Celebration Effects**: Firework-style confetti and mobile vibration on win
+- **⚖️ Weighted Prize System**: Configurable prize pool with probability weights
+- **💾 Session Persistence**: Order data stored in localStorage and database
 
 ## 🏗️ Project Structure
 
@@ -22,13 +25,15 @@ A mobile-optimized scratch-to-reveal prize web application with email collection
 scratch-card-app/
 ├── server.js              # Express server with PostgreSQL
 ├── package.json           # Dependencies
-├── .env                   # Database configuration (create from .env.example)
+├── .env                   # All configuration (create from .env.example)
 ├── .env.example           # Example environment variables
 └── public/
     ├── index.html         # Main HTML page with email modal
     ├── style.css          # Diwali-themed responsive styling
     └── app.js             # Canvas, touch logic & email handling
 ```
+
+**Note:** All configuration (prizes, minimum amount, store info) is now in `.env` file!
 
 ## 🚀 Quick Start
 

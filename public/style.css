@@ -294,12 +294,39 @@ body::before {
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
 }
 
-#emailForm {
+.modal-description {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 15px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+.modal-description strong {
+  color: #ffd700;
+  font-size: 1.2rem;
+}
+
+#orderForm {
   display: flex;
   flex-direction: column;
   gap: 15px;
 }
 
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  text-align: left;
+}
+
+.form-group label {
+  color: white;
+  font-weight: bold;
+  font-size: 0.9rem;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+#orderIdInput,
 #emailInput {
   padding: 15px 20px;
   font-size: 1rem;
@@ -311,14 +338,43 @@ body::before {
   transition: all 0.3s ease;
 }
 
+#orderIdInput:focus,
 #emailInput:focus {
   border-color: #ffed4e;
   box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
   transform: scale(1.02);
 }
 
+#orderIdInput::placeholder,
 #emailInput::placeholder {
   color: #999;
+}
+
+.validation-message {
+  min-height: 20px;
+  padding: 10px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  text-align: center;
+  font-weight: bold;
+}
+
+.validation-message.error {
+  background: rgba(255, 71, 87, 0.2);
+  color: #ffcccc;
+  border: 2px solid #ff4757;
+}
+
+.validation-message.success {
+  background: rgba(46, 213, 115, 0.2);
+  color: #a8ffd4;
+  border: 2px solid #2ed573;
+}
+
+.validation-message.info {
+  background: rgba(255, 215, 0, 0.2);
+  color: #ffd700;
+  border: 2px solid #ffd700;
 }
 
 .btn-primary {

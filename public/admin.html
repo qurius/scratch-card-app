@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin - Order Management</title>
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+  <!-- Login Screen -->
+  <div id="loginScreen" class="screen">
+    <div class="login-container">
+      <h1>🔐 Admin Login</h1>
+      <p>Order Management System</p>
+      <form id="loginForm">
+        <input 
+          type="password" 
+          id="passwordInput" 
+          placeholder="Enter admin password"
+          required
+          autocomplete="current-password"
+        >
+        <button type="submit">Login</button>
+      </form>
+      <p id="loginError" class="error"></p>
+    </div>
+  </div>
+
+  <!-- Admin Dashboard -->
+  <div id="adminScreen" class="screen hidden">
+    <header>
+      <h1>📝 Order Management</h1>
+      <button id="logoutBtn" class="logout-btn">Logout</button>
+    </header>
+
+    <main>
+      <!-- Create Order Section -->
+      <section class="card">
+        <h2>Create New Order</h2>
+        
+        <form id="orderForm">
+          <div class="form-group">
+            <label for="customerEmail">Customer Email *</label>
+            <input 
+              type="email" 
+              id="customerEmail" 
+              placeholder="customer@fplabs.tech"
+              required
+              pattern=".*@fplabs\.tech$"
+            >
+          </div>
+
+          <div class="products-section">
+            <h3>Products</h3>
+            <div id="productsList"></div>
+            <button type="button" id="addProductBtn" class="secondary-btn">+ Add Product</button>
+          </div>
+
+          <div class="order-summary">
+            <div class="summary-row">
+              <span>Total Amount:</span>
+              <span id="totalAmount" class="amount">₹0</span>
+            </div>
+            <div class="summary-row">
+              <span>Prize Tier:</span>
+              <span id="tierDisplay" class="tier-badge">-</span>
+            </div>
+          </div>
+
+          <button type="submit" class="primary-btn" id="createOrderBtn">Create Order</button>
+        </form>
+
+        <!-- Order Result -->
+        <div id="orderResult" class="result hidden"></div>
+      </section>
+
+      <!-- Recent Orders Section -->
+      <section class="card">
+        <h2>Recent Orders</h2>
+        <div class="table-controls">
+          <button id="refreshOrders" class="secondary-btn">🔄 Refresh</button>
+        </div>
+        <div id="ordersTable"></div>
+      </section>
+
+      <!-- Products Management Section -->
+      <section class="card">
+        <h2>Product Catalog</h2>
+        <button id="toggleProducts" class="secondary-btn">Show/Hide Products</button>
+        <div id="productsManagement" class="hidden">
+          <div id="productsCatalog"></div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="admin.js"></script>
+</body>
+</html>

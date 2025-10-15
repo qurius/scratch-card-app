@@ -4,11 +4,15 @@ let isScratching = false;
 let isRevealed = false;
 let userId = null;
 let userEmail = null;
+let userOrderId = null;
 let prize = null;
 const SCRATCH_THRESHOLD = 50; // Percentage of canvas scratched to auto-reveal
 
+// Config from server
+let appConfig = {};
+
 // Audio elements
-let scratchSound, revealSound, celebrationSound;
+let scratchSound, revealSound, celebrationSound, errorSound;
 
 // Initialize app
 document.addEventListener('DOMContentLoaded', async () => {
@@ -19,66 +23,159 @@ document.addEventListener('DOMContentLoaded', async () => {
   scratchSound = document.getElementById('scratchSound');
   revealSound = document.getElementById('revealSound');
   celebrationSound = document.getElementById('celebrationSound');
+  errorSound = document.getElementById('errorSound');
   
   // Set audio volumes
   if (scratchSound) scratchSound.volume = 0.3;
   if (revealSound) revealSound.volume = 0.5;
   if (celebrationSound) celebrationSound.volume = 0.6;
+  if (errorSound) errorSound.volume = 0.4;
   
   // Set canvas size
   resizeCanvas();
   window.addEventListener('resize', resizeCanvas);
   
-  // Check if user already has email stored
-  const storedUserId = localStorage.getItem('scratchCardUserId');
+  // Load config from server
+  await loadConfig();
+  
+  // Check if user already has order data stored
+  const storedOrderId = localStorage.getItem('scratchCardOrderId');
   const storedEmail = localStorage.getItem('scratchCardEmail');
+  const storedUserId = localStorage.getItem('scratchCardUserId');
   
-  console.log('Checking localStorage on load:', { storedUserId, storedEmail });
+  console.log('Checking localStorage on load:', { storedOrderId, storedEmail, storedUserId });
   
-  if (storedEmail && storedUserId) {
-    // User has played before, skip modal
+  if (storedOrderId && storedEmail && storedUserId) {
+    // User has order stored, validate it
+    userOrderId = storedOrderId;
     userEmail = storedEmail;
     userId = storedUserId;
-    console.log('Existing user detected, skipping modal');
-    document.getElementById('emailModal').classList.add('hidden');
-    await initSession();
-    setupEventListeners();
+    console.log('Existing order detected, validating...');
+    
+    const validation = await validateOrder(storedOrderId, storedEmail);
+    if (validation.valid && !validation.alreadyUsed) {
+      document.getElementById('orderModal').classList.add('hidden');
+      await initSession();
+      setupEventListeners();
+    } else {
+      // Order already used or invalid, clear storage and show modal
+      clearLocalStorage();
+      showOrderModal();
+    }
   } else {
-    // Show email modal
-    console.log('New user, showing email modal');
-    showEmailModal();
+    // Show order modal
+    console.log('New user, showing order modal');
+    showOrderModal();
   }
 });
 
-// Show email modal
-function showEmailModal() {
-  const modal = document.getElementById('emailModal');
-  const form = document.getElementById('emailForm');
+// Load configuration from server
+async function loadConfig() {
+  try {
+    const response = await fetch('/api/config');
+    appConfig = await response.json();
+    
+    // Update UI with config
+    const minAmountEl = document.getElementById('minAmount');
+    if (minAmountEl) {
+      minAmountEl.textContent = appConfig.minPurchaseAmount;
+    }
+    
+    console.log('Config loaded:', appConfig);
+  } catch (error) {
+    console.error('Failed to load config:', error);
+    appConfig = { minPurchaseAmount: 500 };
+  }
+}
+
+// Clear local storage
+function clearLocalStorage() {
+  localStorage.removeItem('scratchCardOrderId');
+  localStorage.removeItem('scratchCardEmail');
+  localStorage.removeItem('scratchCardUserId');
+}
+
+// Show order validation modal
+function showOrderModal() {
+  const modal = document.getElementById('orderModal');
+  const form = document.getElementById('orderForm');
+  const validationMsg = document.getElementById('validationMessage');
   
   modal.classList.remove('hidden');
   
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
     
+    const orderIdInput = document.getElementById('orderIdInput');
     const emailInput = document.getElementById('emailInput');
-    userEmail = emailInput.value.trim();
     
-    if (!userEmail || !validateEmail(userEmail)) {
-      alert('Please enter a valid email address');
+    const orderId = orderIdInput.value.trim();
+    const email = emailInput.value.trim();
+    
+    if (!orderId || !email) {
+      showValidationMessage('Please enter both Order ID and Email', 'error');
       return;
     }
     
-    // Store email immediately in localStorage
-    localStorage.setItem('scratchCardEmail', userEmail);
-    console.log('Email stored:', userEmail);
+    if (!validateEmail(email)) {
+      showValidationMessage('Please enter a valid email address', 'error');
+      return;
+    }
     
-    // Hide modal
-    modal.classList.add('hidden');
+    // Validate order with server
+    showValidationMessage('Validating order...', 'info');
     
-    // Initialize session with email
-    await initSession();
-    setupEventListeners();
+    const validation = await validateOrder(orderId, email);
+    
+    if (validation.valid) {
+      showValidationMessage('✅ ' + validation.message, 'success');
+      
+      // Store order details
+      userOrderId = orderId;
+      userEmail = email;
+      localStorage.setItem('scratchCardOrderId', orderId);
+      localStorage.setItem('scratchCardEmail', email);
+      
+      // Hide modal and proceed
+      setTimeout(async () => {
+        modal.classList.add('hidden');
+        await initSession();
+        setupEventListeners();
+      }, 1000);
+    } else {
+      // Play error sound
+      playSound(errorSound);
+      showValidationMessage('❌ ' + validation.message, 'error');
+    }
   });
+}
+
+// Validate order with backend
+async function validateOrder(orderId, email) {
+  try {
+    const response = await fetch('/api/validate-order', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ orderId, email })
+    });
+    
+    const data = await response.json();
+    console.log('Order validation:', data);
+    return data;
+  } catch (error) {
+    console.error('Order validation error:', error);
+    return {
+      valid: false,
+      message: 'Failed to validate order. Please try again.'
+    };
+  }
+}
+
+// Show validation message
+function showValidationMessage(message, type) {
+  const msgEl = document.getElementById('validationMessage');
+  msgEl.textContent = message;
+  msgEl.className = 'validation-message ' + type;
 }
 
 // Validate email format
@@ -157,7 +254,8 @@ async function fetchPrize() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ 
         userId,
-        email: userEmail 
+        email: userEmail,
+        orderId: userOrderId 
       })
     });
     

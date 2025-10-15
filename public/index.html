@@ -7,28 +7,48 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <!-- Email Modal -->
-  <div id="emailModal" class="modal">
+  <!-- Order Validation Modal -->
+  <div id="orderModal" class="modal">
     <div class="modal-content">
       <div class="modal-header">
-        <h2>🪔 Welcome to OneCard Diwali Dhamaka! 🪔</h2>
+        <h2>🪔 OneCard Diwali Dhamaka! 🪔</h2>
         <p>शुभ दीपावली!</p>
       </div>
       <div class="modal-body">
-        <p>Enter your email to play and win exciting prizes!</p>
-        <form id="emailForm">
-          <input 
-            type="email" 
-            id="emailInput" 
-            placeholder="Enter your email" 
-            required
-            autocomplete="email"
-          />
+        <p class="modal-description">
+          Thank you for shopping with us! 🎉<br>
+          Purchases above <strong>₹<span id="minAmount">500</span></strong> are eligible for Scratch & Win
+        </p>
+        <form id="orderForm">
+          <div class="form-group">
+            <label for="orderIdInput">Order ID / Invoice Number</label>
+            <input 
+              type="text" 
+              id="orderIdInput" 
+              placeholder="Enter your Order ID" 
+              required
+              autocomplete="off"
+            />
+          </div>
+          <div class="form-group">
+            <label for="emailInput">Email Address</label>
+            <input 
+              type="email" 
+              id="emailInput" 
+              placeholder="Enter your email" 
+              required
+              autocomplete="email"
+            />
+          </div>
+          <div id="validationMessage" class="validation-message"></div>
           <button type="submit" class="btn-primary">
-            🎁 Start Playing
+            ✨ Verify & Play
           </button>
         </form>
-        <p class="privacy-note">Your email is safe with us and used only for prize distribution.</p>
+        <p class="privacy-note">
+          Your details are secure and used only for prize distribution.<br>
+          <small>Each order can be used only once for scratch & win.</small>
+        </p>
       </div>
     </div>
   </div>
@@ -77,6 +97,9 @@
   </audio>
   <audio id="celebrationSound" preload="auto">
     <source src="https://assets.mixkit.co/active_storage/sfx/1435/1435-preview.mp3" type="audio/mpeg">
+  </audio>
+  <audio id="errorSound" preload="auto">
+    <source src="https://assets.mixkit.co/active_storage/sfx/2955/2955-preview.mp3" type="audio/mpeg">
   </audio>
 
   <script src="app.js"></script>
