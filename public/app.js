@@ -22,7 +22,10 @@ document.addEventListener('DOMContentLoaded', async () => {
   // Initialize audio
   scratchSound = document.getElementById('scratchSound');
   revealSound = document.getElementById('revealSound');
-  celebrationSound = document.getElementById('celebrationSound');
+  const randomNumberSound = getRandomIntInclusive(1, 3);
+  console.log(randomNumberSound); // This will output 1, 2, or 3 randomly
+  // celebrationSound = document.getElementById('celebrationSound-'+randomNumberSound);
+  celebrationSound = document.getElementById('celebrationSound-'+randomNumberSound);
   errorSound = document.getElementById('errorSound');
   
   // Set audio volumes
@@ -493,3 +496,9 @@ function playSound(audioElement) {
     });
   }
 }
+function getRandomIntInclusive(min, max) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
