@@ -136,7 +136,7 @@ function addProductRow() {
       <option value="">Select Product...</option>
       ${products.map(p => `<option value="${p.id}" data-price="${p.price}">${p.category} - ${p.name} - ₹${p.price}</option>`).join('')}
     </select>
-    <input type="number" class="quantity-input" data-row="${productCounter}" min="1" value="1" required placeholder="Qty">
+    <input type="number" class="quantity-input" data-row="${productCounter}" min="1" value="1" required placeholder="Qty" inputmode="numeric" pattern="[0-9]*">
     <button type="button" class="remove-btn" data-row="${productCounter}">Remove</button>
   `;
   
@@ -217,11 +217,17 @@ async function handleCreateOrder(e) {
       throw new Error('Please add at least one product');
     }
     
+    // Get email value and append @fplabs.tech if not already present
+    let emailValue = customerEmail.value.trim().toLowerCase();
+    if (!emailValue.includes('@')) {
+      emailValue = `${emailValue}@fplabs.tech`;
+    }
+    
     const response = await fetch('/api/admin/create-order', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        email: customerEmail.value.trim().toLowerCase(),
+        email: emailValue,
         items
       })
     });
@@ -254,6 +260,7 @@ function showOrderSuccess(data) {
     <h3>✅ Order Created Successfully!</h3>
     <div class="order-id">${data.orderId}</div>
     <div>
+      <strong>Email:</strong> ${data.email}<br>
       <strong>Amount:</strong> ₹${data.amount.toFixed(2)}<br>
       <strong>Tier:</strong> ${data.tier.emoji} ${data.tier.name} (${data.tier.range})<br>
       <strong>Eligible:</strong> ${data.isEligible ? '✅ Yes' : '❌ No'}

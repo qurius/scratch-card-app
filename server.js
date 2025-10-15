@@ -204,8 +204,8 @@ const initDatabase = async () => {
           ('Lotus', 180, 'ShubhLabh'),
           ('Moti', 1000, 'Bandhanwar'),
           ('Heavy Flower', 1900, 'Bandhanwar'),
-          ('Light Weight Rangoli', 4, 'Rangoli'), 
-          ('Heavy', 8, 'Rangoli');
+          ('Light Weight Rangoli', 1000, 'Rangoli'), 
+          ('Heavy', 2400, 'Rangoli');
       `);
       console.log('✅ Default products added');
     }
@@ -235,35 +235,31 @@ app.use(session({
 // HELPER FUNCTIONS
 // ============================================
 
-// Generate simple order ID from email
-// Example: amit@fplabs.tech -> AMIT or AMIT-001 (if amit exists)
+// Generate order ID from email with random 2-digit number
+// Example: amit@fplabs.tech -> AMIT_47, parth@fplabs.tech -> PARTH_23
 async function generateOrderId(email) {
   // Extract username from email (before @)
   const username = email.split('@')[0].toUpperCase();
   
-  // Check if this username already has orders
-  const existingOrders = await pool.query(
-    `SELECT order_id FROM orders WHERE order_id LIKE $1 ORDER BY order_id DESC LIMIT 1`,
-    [`${username}%`]
+  // Generate random 2-digit number (00-99)
+  const randomNum = Math.floor(Math.random() * 100).toString().padStart(2, '0');
+  
+  // Create order ID: USERNAME_XX
+  const orderId = `${username}_${randomNum}`;
+  
+  // Check if this order ID already exists (unlikely but possible)
+  const existingOrder = await pool.query(
+    'SELECT order_id FROM orders WHERE LOWER(order_id) = LOWER($1)',
+    [orderId]
   );
   
-  if (existingOrders.rows.length === 0) {
-    // First order for this user
-    return username;
-  } else {
-    // Extract number from last order ID or start from 001
-    const lastOrderId = existingOrders.rows[0].order_id;
-    const match = lastOrderId.match(/-(\d+)$/);
-    
-    if (match) {
-      // Increment the number
-      const nextNum = parseInt(match[1]) + 1;
-      return `${username}-${String(nextNum).padStart(3, '0')}`;
-    } else {
-      // First order was just username, next is username-001
-      return `${username}-001`;
-    }
+  // If by chance it exists, try again with a different random number
+  if (existingOrder.rows.length > 0) {
+    console.log(`Order ID ${orderId} already exists, generating new one...`);
+    return generateOrderId(email); // Recursive call to get a different random number
   }
+  
+  return orderId;
 }
 
 // Get tier based on order amount
@@ -500,11 +496,12 @@ app.post('/api/admin/create-order', requireAuth, async (req, res) => {
     
     const tierEmoji = tier.name === 'Bronze' ? '🥉' : tier.name === 'Silver' ? '🥈' : '🥇';
     
-    console.log(`Order created: ₹${totalAmount} → ${tier.name} tier`);
+    console.log(`Order created: ₹${totalAmount} → ${tier.name} tier for ${email}`);
     
     res.json({
       success: true,
       orderId,
+      email: email.toLowerCase(),
       amount: totalAmount,
       items: orderItems,
       isEligible,

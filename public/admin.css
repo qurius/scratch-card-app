@@ -438,34 +438,251 @@ main {
   color: #555;
 }
 
-/* Responsive */
+/* Responsive - Mobile Optimization */
 @media (max-width: 768px) {
   body {
-    padding: 10px;
+    padding: 8px;
   }
 
+  /* Header - More compact on mobile */
   header {
-    padding: 15px;
+    padding: 12px 15px;
+    flex-direction: row;
+    gap: 10px;
   }
 
   header h1 {
-    font-size: 18px;
+    font-size: 16px;
   }
 
+  .logout-btn {
+    padding: 6px 12px;
+    font-size: 13px;
+  }
+
+  /* Cards - Less padding on mobile */
   .card {
-    padding: 20px;
+    padding: 15px;
+    margin-bottom: 15px;
+  }
+
+  .card h2 {
+    font-size: 18px;
+    margin-bottom: 15px;
+  }
+
+  .card h3 {
+    font-size: 15px;
+  }
+
+  /* Form inputs - Larger for mobile touch */
+  .form-group input,
+  .form-group select {
+    padding: 14px 12px;
+    font-size: 16px; /* Prevents zoom on iOS */
+    min-height: 48px; /* Better touch target */
+  }
+
+  .form-group label {
+    font-size: 15px;
+    margin-bottom: 6px;
+  }
+
+  /* Product rows - Stack vertically on mobile */
+  .products-section {
+    padding: 15px;
+    margin: 15px 0;
   }
 
   .product-row {
     grid-template-columns: 1fr;
+    gap: 12px;
+    margin-bottom: 15px;
+    padding: 15px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
   }
 
+  .product-row select,
+  .product-row input {
+    width: 100%;
+    padding: 14px 12px;
+    font-size: 16px;
+    min-height: 48px;
+  }
+
+  .remove-btn {
+    width: 100%;
+    padding: 12px;
+    font-size: 14px;
+    min-height: 44px;
+  }
+
+  /* Add product button - Full width on mobile */
+  #addProductBtn {
+    width: 100%;
+    padding: 14px;
+    font-size: 15px;
+    margin: 10px 0;
+  }
+
+  /* Order summary - Better mobile layout */
+  .order-summary {
+    padding: 15px;
+    margin: 15px 0;
+  }
+
+  .summary-row {
+    font-size: 15px;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+  }
+
+  .amount {
+    font-size: 28px;
+  }
+
+  .tier-badge {
+    font-size: 15px;
+    padding: 6px 14px;
+  }
+
+  /* Buttons - Full width and larger on mobile */
+  .primary-btn,
+  .secondary-btn {
+    width: 100%;
+    padding: 16px;
+    font-size: 16px;
+    margin: 8px 0;
+    min-height: 52px;
+  }
+
+  /* Result display */
+  .result {
+    padding: 15px;
+    margin-top: 15px;
+  }
+
+  .result .order-id {
+    font-size: 28px;
+    margin: 12px 0;
+  }
+
+  .result h3 {
+    font-size: 16px;
+  }
+
+  .result .message {
+    padding: 12px;
+    font-size: 14px;
+  }
+
+  /* Orders table - Better mobile cards */
   .order-item {
     grid-template-columns: 1fr;
-    gap: 8px;
+    gap: 10px;
+    padding: 12px;
+    font-size: 13px;
   }
 
+  .order-item .order-id {
+    font-size: 18px;
+    font-weight: 700;
+  }
+
+  .order-item .email {
+    font-size: 13px;
+    word-break: break-word;
+  }
+
+  .order-item .amount {
+    font-size: 18px;
+  }
+
+  .order-item .status {
+    padding: 6px 10px;
+    font-size: 13px;
+    max-width: 150px;
+  }
+
+  /* Products catalog */
   .products-grid {
     grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .product-card {
+    padding: 12px;
+  }
+
+  .product-card .price {
+    font-size: 18px;
+  }
+
+  /* Table controls */
+  .table-controls {
+    margin-bottom: 12px;
+  }
+
+  /* Login screen - Better mobile */
+  .login-container {
+    margin: 50px auto;
+    padding: 30px 20px;
+  }
+
+  .login-container h1 {
+    font-size: 28px;
+  }
+
+  #loginForm input {
+    font-size: 16px;
+    padding: 14px 12px;
+    min-height: 48px;
+  }
+
+  #loginForm button {
+    font-size: 16px;
+    padding: 14px;
+    min-height: 48px;
+  }
+}
+
+/* Extra small devices (phones in portrait, less than 400px) */
+@media (max-width: 400px) {
+  body {
+    padding: 5px;
+  }
+
+  header {
+    padding: 10px;
+  }
+
+  header h1 {
+    font-size: 14px;
+  }
+
+  .card {
+    padding: 12px;
+  }
+
+  .card h2 {
+    font-size: 16px;
+  }
+
+  .product-row {
+    padding: 12px;
+  }
+
+  .order-summary {
+    padding: 12px;
+  }
+
+  .amount {
+    font-size: 24px;
+  }
+
+  .result .order-id {
+    font-size: 24px;
   }
 }
